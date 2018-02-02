@@ -1,0 +1,8 @@
+version: '3'
+services:
+  back:
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    ports:
+     - "8001:8001"
