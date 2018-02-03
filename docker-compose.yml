@@ -1,16 +1,5 @@
 version: '3'
 services:
-  backend:
-    restart: always
-    build:
-      context: .
-      dockerfile: ./docker/django/Dockerfile
-    volumes:
-     - ./src:/code
-    expose:
-      - 8000
-  redis:
-    image: "redis:alpine"
   nginx:
     restart: always
     image: nginx
@@ -18,4 +7,29 @@ services:
         - 8000:8000
     volumes:
         - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+  backend:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /code/gunicorn-entrypoint.sh
+    volumes:
+     - ./src:/code
+    expose:
+      - 8000
+    links:
+      - nginx
+      - redis
+  worker:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+    command: /code/celery-entrypoint.sh
+    volumes:
+     - ./src:/code
+    links:
+      - redis
+  redis:
+    image: "redis:alpine"
   
