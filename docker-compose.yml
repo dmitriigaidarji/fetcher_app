@@ -5,8 +5,12 @@ services:
     build:
       context: .
       dockerfile: ./docker/django/Dockerfile
+    volumes:
+     - ./src:/code
     expose:
       - 8000
+  redis:
+    image: "redis:alpine"
   nginx:
     restart: always
     image: nginx
