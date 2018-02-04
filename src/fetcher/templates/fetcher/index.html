@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+{% load render_bundle from webpack_loader %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<h1>Page was loaded</h1>
+<div id="FetcherApp"></div>
+{% render_bundle 'vendors' %}
+{% render_bundle 'FetcherApp' %}
+</body>
+</html>

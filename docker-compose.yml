@@ -1,14 +1,27 @@
 version: '3'
 services:
+  db:
+    restart: always
+    image: mariadb
+    container_name: fetcher_db
+    environment:
+      - MYSQL_USER=fetcheruser
+      - MYSQL_PASSWORD=fetcherpass
+      - MYSQL_DATABASE=fetcher
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
   nginx:
     restart: always
     image: nginx
+    container_name: fetcher_nginx
     ports:
         - 8000:8000
     volumes:
         - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
   backend:
     restart: always
+    container_name: fetcher_backend
     build:
       context: .
       dockerfile: ./docker/django/Dockerfile
@@ -20,8 +33,11 @@ services:
     links:
       - nginx
       - redis
+    depends_on:
+      - db
   worker:
     restart: always
+    container_name: fetcher_worker
     build:
       context: .
       dockerfile: ./docker/django/Dockerfile
@@ -31,5 +47,6 @@ services:
     links:
       - redis
   redis:
+    container_name: fetcher_redis
     image: "redis:alpine"
   
