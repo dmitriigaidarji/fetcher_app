@@ -35,6 +35,18 @@ services:
       - redis
     depends_on:
       - db
+  webdev:
+    restart: always
+    container_name: fetcher_webdev
+    build:
+      context: .
+      dockerfile: ./docker/webdev/Dockerfile
+    volumes:
+     - ./src:/code
+    ports:
+        - 3000:3000
+    depends_on:
+      - backend
   worker:
     restart: always
     container_name: fetcher_worker
