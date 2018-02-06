@@ -37,7 +37,7 @@ localhost:8000
  - Move all heavy calculations to Celery tasks
  - Publish project to a demo server
  - Add Google crawler functionality
- - Add RabbitMQ service as a more communication layer between Django and Celery
+ - Add RabbitMQ service as a more reliable communication layer between Django and Celery
  - Add sign up / login functionality instead of anonymous sessions
 
 License
