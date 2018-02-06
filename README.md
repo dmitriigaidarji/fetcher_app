@@ -35,6 +35,7 @@ localhost:8000
 
  - Rewrite all javascript requests using AXIOS library and move everything to reducers
  - Move all heavy calculations to Celery tasks
+ - Publish project to a demo server
  - Add Google crawler functionality
  - Add RabbitMQ service as a more communication layer between Django and Celery
  - Add sign up / login functionality instead of anonymous sessions
