@@ -8,5 +8,38 @@ This application is served as an example of how to create a development environm
   - Node.js server for hot live-update development
   - MariaDB as a database
   - Redis as a cache and Django-Celery communicating layer
+  - Gunicorn as an application server
   - Nginx as web server
   - Docker to containerize everything for development and deployment
+
+
+
+### Installation
+
+Application requires [Docker](https://docker.com/) and [Docker Compose](https://docs.docker.com/compose/) to run.
+
+Build and run the containers
+
+```sh
+$ docker-compose build
+$ docker-compose run
+```
+
+Open the website in your browser
+
+```sh
+localhost:8000
+```
+
+### Todos
+
+ - Rewrite all javascript requests using AXIOS library and move everything to reducers
+ - Move all heavy calculations to Celery tasks
+ - Add Google crawler functionality
+ - Add RabbitMQ service as a more communication layer between Django and Celery
+ - Add sign up / login functionality instead of anonymous sessions
+
+License
+----
+
+MIT
