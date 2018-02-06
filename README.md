@@ -5,6 +5,7 @@ This application is served as an example of how to create a development environm
   - ReactJS front-end single page application with persistent storage using Redux
   - Django back-end serving as REST API framework
   - Celery worker to perform background tasks
+  - PhantomJS headless browser to crawl javascript-heavy websites for data
   - Node.js server for hot live-update development
   - MariaDB as a database
   - Redis as a cache and Django-Celery communicating layer
