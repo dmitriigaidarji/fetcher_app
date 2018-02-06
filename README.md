@@ -13,6 +13,9 @@ This application is served as an example of how to create a development environm
   - Docker to containerize everything for development and deployment
 
 
+### Application description
+
+Query form to perform search requests againt YouTube and Google, display top 100 results, display 'Cloud of Words' for all results from Google
 
 ### Installation
 
