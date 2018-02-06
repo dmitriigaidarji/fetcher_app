@@ -21,8 +21,9 @@ config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
         'process.env': {
             'NODE_ENV': JSON.stringify('development'),
-            'BASE_API_URL': JSON.stringify('http://' + ip + ':8000/dashboard/api/'),
-            'PUBLIC_URL': JSON.stringify('dashboard')
+            'BASE_API_URL': JSON.stringify('http://' + ip + ':8000/api/'),
+            'SERVER': JSON.stringify('http://' + ip + ':3000/'),
+            'PUBLIC_URL': JSON.stringify('/')
         }
     }),
 ]);

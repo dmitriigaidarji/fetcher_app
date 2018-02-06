@@ -1,6 +1,8 @@
 // main.js
 import React from 'react'
 import {AppContainer} from 'react-hot-loader'
+import {StyleRoot} from 'radium';
+import Layout from './containers/Layout'
 
 import {
     createStore,
@@ -15,6 +17,33 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import * as reducers from "./reducers"
 import App from "./containers/InitialContainer";
 import {hydrate, render} from 'react-dom';
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+} from 'react-router-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin';
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {red100, grey900, red700} from 'material-ui/styles/colors';
+
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: grey900,
+        primary2Color: red700,
+        primary3Color: red100,
+    },
+}, {
+    avatar: {
+        borderColor: null,
+    },
+    userAgent: userdata.useragent,
+});
+
 
 let reducer = combineReducers(reducers);
 
@@ -32,14 +61,22 @@ const appRender = (Comp) => {
     renderMethod(
         <Provider store={store}>
             <AppContainer>
-                <Comp />
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <StyleRoot>
+
+                        <Router>
+                            <Route component={Comp}/>
+                        </Router>
+
+                    </StyleRoot>
+                </MuiThemeProvider>
             </AppContainer>
         </Provider>,
         document.getElementById('FetcherApp')
     )
 }
 
-appRender(App)
+appRender(Layout)
 
 
 // Webpack Hot Module Replacement API

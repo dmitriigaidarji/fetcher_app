@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-{% load static %}
+{% extends "fetcher/base.html" %}
+
 {% load render_bundle from webpack_loader %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-</head>
-<body>
-<h1>Page was loaded</h1>
+{% block header %}
+<title>Tools</title>
+{% endblock %}
+{% block main %}
 <div id="FetcherApp"></div>
+<script type="text/javascript">
+	var userdata = {
+		useragent : '{{ useragent }}'
+	}
+</script>
 {% render_bundle 'vendors' %}
 {% render_bundle 'FetcherApp' %}
-</body>
-</html>
+{% endblock %}
