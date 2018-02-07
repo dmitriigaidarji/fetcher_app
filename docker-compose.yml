@@ -44,7 +44,7 @@ services:
     volumes:
      - ./src:/code
     ports:
-        - 3000:3000
+      - 3000:3000
     depends_on:
       - backend
   worker:
@@ -61,4 +61,5 @@ services:
   redis:
     container_name: fetcher_redis
     image: "redis:alpine"
-  
+    ports:
+      - 6379:6379

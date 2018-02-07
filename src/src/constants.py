@@ -3,3 +3,7 @@ FRAMEWORK_DB_USER='fetcheruser'
 FRAMEWORK_DB_PASS='fetcherpass'
 FRAMEWORK_DB_HOST='db'
 FRAMEWORK_DB_PORT=3306
+
+
+REDIS_CACHE_URL='redis://redis:6379/0'
+CELERY_BROKER_URL='redis://redis:6379/1'

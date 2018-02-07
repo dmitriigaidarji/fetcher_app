@@ -10,6 +10,7 @@ from .models import Query, RelatedQuery, Website, WebsiteTags
 from .serializers import QuerySerializer, RelatedSerializer, WebsiteSerializer, TagSerializer, QuerySimpleSerializer
 
 import datetime
+from fetcher.tasks import parse_youtube, parse_google
 
 def initsession(request):
     request.session.set_expiry(5000000) # 2 months
@@ -24,12 +25,13 @@ def query(request):
         type = request.data.get('type','g')
         ident = request.session.get('identifier')
         if type == 'y':
-            parser = YoutubeScrapper()
-            parser.getresults(query, ident)
-            pass
+            parse_youtube.delay(query, ident)
+            # parser = YoutubeScrapper()
+            # parser.getresults(query, ident)
         else:
-            parser = GoogleScrapper()
-            parser.getresults(query)
+            parse_google.delay(query, ident)
+            # parser = GoogleScrapper()
+            # parser.getresults(query, ident)
         return Response(status=status.HTTP_200_OK)
     return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 

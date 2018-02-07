@@ -22,10 +22,10 @@ import {
     Route,
     Switch,
 } from 'react-router-dom'
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
+// injectTapEventPlugin();
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -63,18 +63,16 @@ const appRender = (Comp) => {
             <AppContainer>
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <StyleRoot>
-
                         <Router>
                             <Route component={Comp}/>
                         </Router>
-
                     </StyleRoot>
                 </MuiThemeProvider>
             </AppContainer>
         </Provider>,
         document.getElementById('FetcherApp')
     )
-}
+};
 
 appRender(Layout)
 

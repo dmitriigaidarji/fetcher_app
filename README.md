@@ -40,8 +40,11 @@ localhost:8000
  - Move all heavy calculations to Celery tasks
  - Publish project to a demo server
  - Add Google crawler functionality
+ - Use Websocker for new events (or Firebase service) for live updates of task progress
  - Add RabbitMQ service as a more reliable communication layer between Django and Celery
  - Add sign up / login functionality instead of anonymous sessions
+ - Add unit tests for back end
+ - Add UI tests for front end
 
 License
 ----

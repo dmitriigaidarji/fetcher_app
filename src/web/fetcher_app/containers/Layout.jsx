@@ -43,7 +43,7 @@ export default class Layout extends React.Component {
                   this.setState({queries : response})
               }
           })
-      },1000)
+      },5000)
     }
     componentDidMount(){
         this.setQueriesInterval();
@@ -74,7 +74,7 @@ export default class Layout extends React.Component {
         return(
             <div>
             	<AppBar
-				        title="Viewability Tools"
+				        title="Query Tools"
 				      />
               <InputQuery />
               { node }

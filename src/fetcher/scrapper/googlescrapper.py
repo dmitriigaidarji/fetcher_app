@@ -81,7 +81,7 @@ class WebsiteTagScrapper:
 
 class YoutubeScrapper:
     baseUrl = 'https://youtube.com'
-    numberOfLinksToGet = 100
+    numberOfLinksToGet = 10
     sleepTime = 0
 
 
@@ -134,7 +134,6 @@ class YoutubeScrapper:
         while gotResults and queryModel.websites.count() < self.numberOfLinksToGet:
             doc = self.getNextPage(doc)
             gotResults = self.parsepage(doc, queryModel)
-            pass
 
         queryModel.save()
 
@@ -222,8 +221,8 @@ class GoogleScrapper:
             queryModel.relatedProcessed = True
             queryModel.save()
 
-    def getresults(self, query):
-        queryModel = Query.objects.create(text=query)
+    def getresults(self, query, ident):
+        queryModel = Query.objects.create(text=query, type='g', identifier=ident)
 
         query = urllibparse.quote_plus(query)
 
@@ -249,54 +248,3 @@ class GoogleScrapper:
         # if len(websites) > 0:
         #     parse_websites(websites)
         pass
-
-
-
-
-
-
-
-# def parse_website(self, website):
-#     r = requests.get(website.url)
-#     doc = BeautifulSoup(r.text)
-#     images = doc.find_all('img')
-#     for tag in WebsiteTags.TAG_TYPES:
-#         if tag[0] in {'t', 'h1', 'h2', 'h3', 'h4', 'l'}:
-#             results = doc.find_all(tag[1])
-#             for res in results:
-#                 website.tags.add(WebsiteTags.objects.create(type=tag[0], text=res.text))
-#             pass
-#         elif tag[0] == 'im':
-#             for img in images:
-#                 title = img['title']
-#                 if title is not None and title != '':
-#                     website.tags.add(WebsiteTags.objects.create(type=tag[0], text=title))
-#             pass
-#         elif tag[0] == 'al':
-#             for img in images:
-#                 alt = img['alt']
-#                 if alt is not None and alt != '':
-#                     website.tags.add(WebsiteTags.objects.create(type=tag[0], text=alt))
-#             pass
-#         elif tag[0] == 'b':
-#             strong = doc.find_all('strong')
-#             for str in strong:
-#                 text = str.text
-#                 if text is not None and text != '':
-#                     website.tags.add(WebsiteTags.objects.create(type=tag[0], text=text))
-#             strong = doc.find_all('b')
-#             for str in strong:
-#                 text = str.text
-#                 if text is not None and text != '':
-#                     website.tags.add(WebsiteTags.objects.create(type=tag[0], text=text))
-#             pass
-#         elif tag[0] == 'it':
-#             pass
-#         elif tag[0] == 'u':
-#             # for span in doc.find_all("span", style="text-decoration: underline;"):
-#             #     pass
-#             pass
-#         pass
-#     website.processed = True
-#     website.save()
-#     return True

@@ -5,11 +5,11 @@ from celery import Celery
 from kombu import Exchange, Queue
 from celery.schedules import crontab
 
-from src import settings
+from src import settings, constants
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'src.settings')
 
-app = Celery(str('src'), broker=settings.CELERY_BROKER_URL)
+app = Celery(str('src'), broker=constants.CELERY_BROKER_URL)
 
 # Using a string here means the worker don't have to serialize
 # the configuration object to child processes.
@@ -27,4 +27,4 @@ app.conf.task_default_queue = 'default'
 app.conf.task_default_exchange = 'default'
 app.conf.task_default_routing_key = 'default'
 
-app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

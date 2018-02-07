@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fetcher.apps.FetcherConfig',
+    'fetcher',
 ]
 
 MIDDLEWARE = [
@@ -89,7 +89,6 @@ DATABASES = {
         'PORT': constants.FRAMEWORK_DB_PORT
     }
 }
-
 
 # DATABASES = {
 #     'default': {
@@ -138,7 +137,21 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'compiled'),
 ]
 
-CELERY_BROKER_URL = 'redis://redis:6379/1'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": constants.REDIS_CACHE_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# CELERY_BROKER_URL = constants.CELERY_BROKER_URL
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -146,3 +159,6 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
     }
 }
+
+
+
