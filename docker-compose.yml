@@ -28,8 +28,6 @@ services:
       context: .
       dockerfile: ./docker/django/Dockerfile
     command: /code/gunicorn-entrypoint.sh
-    volumes:
-     - ./src:/code
     expose:
       - 8000
     links:
@@ -45,8 +43,6 @@ services:
       context: .
       dockerfile: ./docker/worker/Dockerfile
     command: /code/celery-entrypoint.sh
-    volumes:
-     - ./src:/code
     links:
       - redis
   redis:
