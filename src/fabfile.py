@@ -13,6 +13,11 @@ def build():
         webpack_local()
 
 @task
+def build_prod():
+    with prefix(env.activate):
+        webpack_local()
+
+@task
 def static():
     local('./manage.py collectstatic --no-input')
 

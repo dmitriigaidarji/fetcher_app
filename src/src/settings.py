@@ -155,10 +155,11 @@ CACHES = {
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/local/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
+        'BUNDLE_DIR_NAME': 'bundles/prod/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-prod.json'),
     }
 }
 
 
 
+# DJANGO_SETTINGS_MODULE=src.localsettings gunicorn src.wsgi

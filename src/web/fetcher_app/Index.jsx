@@ -57,7 +57,7 @@ const store = (module.hot && module.hot.data && module.hot.data.store)
     );
 
 const appRender = (Comp) => {
-    const renderMethod = !!module.hot ? render : ReactDOM.hydrate
+    const renderMethod = !!module.hot ? render : hydrate
     renderMethod(
         <Provider store={store}>
             <AppContainer>

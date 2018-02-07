@@ -1,0 +1,50 @@
+db:
+  restart: always
+  image: mariadb
+  environment:
+    - MYSQL_USER=fetcheruser
+    - MYSQL_PASSWORD=fetcherpass
+    - MYSQL_DATABASE=fetcher
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  ports:
+    - 3306:3306
+nginx:
+  restart: always
+  image: nginx
+  container_name: fetcher_nginx
+  ports:
+      - 8000:8000
+backend:
+  restart: always
+  build:
+    context: .
+    dockerfile: ./docker/django/Dockerfile
+  command: /code/gunicorn-entrypoint.sh
+  expose:
+    - 8000
+  links:
+    - nginx
+    - redis
+  depends_on:
+    - db
+webdev:
+  restart: always
+  build:
+    context: .
+    dockerfile: ./docker/webdev/Dockerfile
+  ports:
+    - 3000:3000
+  depends_on:
+    - backend
+worker:
+  restart: always
+  build:
+    context: .
+    dockerfile: ./docker/worker/Dockerfile
+  command: /code/celery-entrypoint.sh
+  links:
+    - redis
+redis:
+  image: "redis:alpine"
+  ports:
+    - 6379:6379
