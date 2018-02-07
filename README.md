@@ -1,4 +1,4 @@
-# Dockerized React Django Celery applicaiton
+# Dockerized React Django Celery application
 
 This application is served as an example of how to create a development environment using Docker containers to connect Single Page ReactJS application with Django back-end. The stack includes:
 
@@ -31,7 +31,7 @@ $ docker-compose run
 Open the website in your browser
 
 ```sh
-localhost:8000
+0.0.0.0:8000
 ```
 
 ### Todos
