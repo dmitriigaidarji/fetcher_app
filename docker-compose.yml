@@ -52,7 +52,7 @@ services:
     container_name: fetcher_worker
     build:
       context: .
-      dockerfile: ./docker/django/Dockerfile
+      dockerfile: ./docker/worker/Dockerfile
     command: /code/celery-entrypoint.sh
     volumes:
      - ./src:/code

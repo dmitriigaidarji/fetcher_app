@@ -126,7 +126,7 @@ export default class ResultsContainer extends React.Component {
                           <TableRow>
                             <TableHeaderColumn>Query</TableHeaderColumn>
                             <TableHeaderColumn style={ styles.midCol }>URLs</TableHeaderColumn>
-                            <TableHeaderColumn style={ styles.colWidth }></TableHeaderColumn>
+                            <TableHeaderColumn style={ styles.colWidth }/>
                           </TableRow>
                         </TableHeader>
                         <TableBody

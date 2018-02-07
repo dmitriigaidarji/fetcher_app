@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SeoApi from '../SeoApi'
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Snackbar from 'material-ui/Snackbar';
+import DialogBody from "./DialogBody";
 
 let style={
   margin : '12px 30px 12px 0',
