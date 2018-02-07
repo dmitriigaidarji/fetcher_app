@@ -34,7 +34,7 @@ services:
       - nginx
       - redis
     depends_on:
-      - dbs
+      - db
   worker:
     restart: always
     container_name: fetcher_worker
