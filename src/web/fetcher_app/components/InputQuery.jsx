@@ -45,6 +45,7 @@ export default class InputQuery extends React.Component {
               onChange={this._handleTextFieldChange.bind(this)}
             />
             <RaisedButton label="Crawl YouTube" style={style.btn} backgroundColor="#C62828" labelColor="#FFFFFF" onClick={this.callQuery.bind(this, 'y')}/>
+            <RaisedButton label="Crawl Google" primary={true} onClick={this.callQuery.bind(this, 'g')}/>
           </CardText>
         </Card>
       </div>

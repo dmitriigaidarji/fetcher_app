@@ -2,4 +2,4 @@
 
 sleep 10
 
-celery -A src.celery worker -l warning 
+celery -A src.celery worker -l debug 

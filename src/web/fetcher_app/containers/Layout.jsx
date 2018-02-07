@@ -65,7 +65,7 @@ export default class Layout extends React.Component {
             for (let i = 0; i < this.state.queries.length; i++) {
                 let q = this.state.queries[i]
                 if (q.type != 'g') yqueries.push(q)
-                else yqueries.push(q)
+                else gqueries.push(q)
             }
             if (this.state.queries.length > 0)
                 node = (<div>
@@ -87,10 +87,6 @@ export default class Layout extends React.Component {
                                 <ResultsContainer type={'y'} queries={yqueries}/>
                             </div>
                         </SwipeableViews>
-
-                        <div style={styles.slide}>
-                            <ResultsContainer type={'y'} queries={yqueries}/>
-                        </div>
                     </div>
                 )
         }

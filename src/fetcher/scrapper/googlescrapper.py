@@ -81,8 +81,8 @@ class WebsiteTagScrapper:
 
 class YoutubeScrapper:
     baseUrl = 'https://youtube.com'
-    numberOfLinksToGet = 10
-    sleepTime = 0
+    numberOfLinksToGet = 15
+    sleepTime = 2
 
 
     def parsepage(self, page, queryModel):
@@ -139,9 +139,9 @@ class YoutubeScrapper:
 
 class GoogleScrapper:
     googleBaseUrl = 'https://www.google.com/search?ion=1&espv=2&ie=UTF-8&aqs=chrome..69i57j0l5.1736j0j8'
-    numberOfLinksToGet = 100
+    numberOfLinksToGet = 15
     numberOfResultsPerPage = 100
-    sleepTime = 0
+    sleepTime = 2
     # web_scrapper = WebsiteTagScrapper()
 
     def __init__(self):
