@@ -6,6 +6,7 @@ import ResultsContainer from './ResultsContainer'
 import SwipeableViews from 'react-swipeable-views';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SeoApi from '../SeoApi'
+import FlatButton from 'material-ui/FlatButton';
 
 let styles = {
     imageContainer: {
@@ -38,6 +39,11 @@ export default class Layout extends React.Component {
     }
 
     setQueriesInterval() {
+        SeoApi.getUserQueries((response) => {
+            if (response != undefined) {
+                this.setState({queries: response})
+            }
+        })
         this.queriesInterval = setInterval(() => {
             SeoApi.getUserQueries((response) => {
                 if (response != undefined) {
@@ -93,7 +99,10 @@ export default class Layout extends React.Component {
         return (
             <div>
                 <AppBar
-                    title="Query Tools"
+                    title="Fetcher App"
+                    showMenuIconButton={false}
+                    iconElementRight={<FlatButton onClick={()=>window.location='/logout/'}
+                                                  label="Log out" />}
                 />
                 <InputQuery />
 

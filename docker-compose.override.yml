@@ -1,0 +1,18 @@
+version: '3'
+services:
+  backend:
+    environment:
+      - DJANGO_DEVELOPMENT=True
+  webdev:
+      restart: always
+      container_name: fetcher_webdev
+      image: dmitriigaidarji/fetcher_webdev
+      build:
+        context: .
+        dockerfile: ./docker/webdev/Dockerfile
+      volumes:
+       - ./src:/code
+      ports:
+        - 3000:3000
+      depends_on:
+        - backend

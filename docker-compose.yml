@@ -18,8 +18,12 @@ services:
     build:
       context: .
       dockerfile: ./docker/nginx/Dockerfile
+    volumes:
+      - ./src/static:/code/static
     ports:
         - 8000:8000
+    depends_on:
+      - backend
   backend:
     restart: always
     container_name: fetcher_backend
@@ -28,10 +32,13 @@ services:
       context: .
       dockerfile: ./docker/django/Dockerfile
     command: /code/gunicorn-entrypoint.sh
+    volumes:
+      - ./src:/code
+      - /code/node_modules/
+      - /code/env/
     expose:
       - 8000
     links:
-      - nginx
       - redis
     depends_on:
       - db
@@ -43,8 +50,13 @@ services:
       context: .
       dockerfile: ./docker/worker/Dockerfile
     command: /code/celery-entrypoint.sh
+    volumes:
+      - ./src:/code
+      - /code/env/
     links:
       - redis
+    depends_on:
+      - backend
   redis:
     container_name: fetcher_redis
     image: "redis:alpine"

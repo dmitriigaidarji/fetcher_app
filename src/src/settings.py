@@ -29,7 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
-    '0.0.0.0'
+    '0.0.0.0',
+    'backend'
 ]
 
 # Application definition
@@ -137,7 +138,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'compiled'),
 ]
 
-
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
@@ -159,7 +159,23 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-prod.json'),
     }
 }
+# print("Is development mode: " + os.environ.get('DJANGO_DEVELOPMENT', 'None'))
+
+if os.environ.get('DJANGO_DEVELOPMENT'):
+    print("Confirmed dev mode")
+    WEBPACK_LOADER = {
+        'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'bundles/local/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
+        }
+    }
+
+if os.environ.get('DJANGO_SQLITEDB'):
+    from src.localsettings import *
 
 
-
+APPEND_SLASH = True
+AUTH_USER_MODEL = 'fetcher.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 # DJANGO_SETTINGS_MODULE=src.localsettings gunicorn src.wsgi

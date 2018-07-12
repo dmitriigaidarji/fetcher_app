@@ -20,20 +20,25 @@ services:
       dockerfile: ./docker/nginx/Dockerfile
     ports:
         - 8000:8000
+    depends_on:
+      - backend
   backend:
     restart: always
     container_name: fetcher_backend
     image: dmitriigaidarji/fetcher_backend
+    environment:
+      - DJANGO_DEVELOPMENT=True
     build:
       context: .
       dockerfile: ./docker/django/Dockerfile
     command: /code/gunicorn-entrypoint.sh
     volumes:
      - ./src:/code
+     - /code/node_modules/
+     - /code/env/
     expose:
       - 8000
     links:
-      - nginx
       - redis
     depends_on:
       - db
@@ -60,8 +65,11 @@ services:
     command: /code/celery-entrypoint.sh
     volumes:
      - ./src:/code
+     - /code/env/
     links:
       - redis
+    depends_on:
+      - backend
   redis:
     container_name: fetcher_redis
     image: "redis:alpine"

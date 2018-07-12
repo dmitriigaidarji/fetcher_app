@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth.views import login, logout
 from django.urls import path, include
 from rest_framework import routers, serializers, viewsets
 from fetcher.api import QuerySet
@@ -26,5 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='logout'),
     url(r'^', include('fetcher.urls')),
 ]

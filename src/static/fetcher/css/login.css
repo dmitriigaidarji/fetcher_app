@@ -1,0 +1,50 @@
+html, body {
+    background-color: #27282d;
+    height: 100%;
+    font-family: "Roboto", "Helvetica Neue", "Open Sans", sans-serif;
+     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizelegibility;
+}
+
+#title {
+    text-align: center;
+    font-weight: 300;
+    font-size: 130%;
+    margin: 15px 0;
+}
+.errorsContainer{
+    margin: 10px 0;
+}
+.outer-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#loginForm {
+    background-color: white;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1) !important;
+    padding: 15px;
+    width: 80%;
+    max-width: 335px;
+}
+
+#loginForm .input-group {
+    margin-bottom: 10px;
+}
+
+#loginForm input {
+    width: 100%;
+    font-size: 110%;
+}
+
+#submit {
+    width: 100%;
+    margin-top: 15px;
+    background-color: #f5f3ec;
+    font-size: 110%;
+    color: #2d2d2d;
+    border-radius: 3px;
+}
