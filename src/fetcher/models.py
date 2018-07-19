@@ -59,21 +59,24 @@ class RelatedQuery(models.Model):
 
 
 class Query(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    identifier = models.CharField(max_length=50, null=True)
     websites = models.ManyToManyField(Website)
     related = models.ManyToManyField(RelatedQuery)
     relatedProcessed = models.BooleanField(default=False)
+
+    QUERY_TYPE_GOOGLE = 'g'
+    QUERY_TYPE_YOUTUBE = 'y'
     query_types = (
-        ('g', 'google'),
-        ('y', 'youtube'),
+        (QUERY_TYPE_GOOGLE, 'google'),
+        (QUERY_TYPE_YOUTUBE, 'youtube'),
     )
     type = models.CharField(
         max_length=1,
         choices=query_types,
-        default='g',
+        default=QUERY_TYPE_GOOGLE,
     )
     
     def __str__(self):
@@ -83,3 +86,7 @@ class Query(models.Model):
         ordering = ('-id',)
 
 
+
+
+#TODO superuser automation
+#https://stackoverflow.com/questions/6244382/how-to-automate-createsuperuser-on-django

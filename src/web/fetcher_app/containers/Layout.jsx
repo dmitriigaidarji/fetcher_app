@@ -1,12 +1,12 @@
 import React from "react"
 import AppBar from 'material-ui/AppBar';
 import InputQuery from '../components/InputQuery'
-import RaisedButton from 'material-ui/RaisedButton';
 import ResultsContainer from './ResultsContainer'
 import SwipeableViews from 'react-swipeable-views';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import SeoApi from '../SeoApi'
 import FlatButton from 'material-ui/FlatButton';
+import {connect} from "react-redux";
+import {getUserQueries} from '../actions/queries'
 
 let styles = {
     imageContainer: {
@@ -27,31 +27,24 @@ let styles = {
     slide: {
         padding: 10,
     },
-}
+};
 
-export default class Layout extends React.Component {
+class Layout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            slideIndex: 0,
-            queries: undefined,
+            slideIndex: 0
         };
     }
 
-    setQueriesInterval() {
-        SeoApi.getUserQueries((response) => {
-            if (response != undefined) {
-                this.setState({queries: response})
-            }
-        })
+    setQueriesInterval = () => {
+        let {dispatch} = this.props;
+        dispatch(getUserQueries());
+
         this.queriesInterval = setInterval(() => {
-            SeoApi.getUserQueries((response) => {
-                if (response != undefined) {
-                    this.setState({queries: response})
-                }
-            })
+            dispatch(getUserQueries());
         }, 5000)
-    }
+    };
 
     componentDidMount() {
         this.setQueriesInterval();
@@ -64,16 +57,17 @@ export default class Layout extends React.Component {
     }
 
     render() {
-        let yqueries = []
-        let gqueries = []
-        let node
-        if (this.state.queries != undefined) {
-            for (let i = 0; i < this.state.queries.length; i++) {
-                let q = this.state.queries[i]
+        let yqueries = [];
+        let gqueries = [];
+        let node;
+        let {queries} = this.props;
+        if (queries != undefined) {
+            for (let i = 0; i < queries.length; i++) {
+                let q = queries[i]
                 if (q.type != 'g') yqueries.push(q)
                 else gqueries.push(q)
             }
-            if (this.state.queries.length > 0)
+            if (queries.length > 0)
                 node = (<div>
                         <Tabs
                             onChange={this.handleChange}
@@ -101,15 +95,20 @@ export default class Layout extends React.Component {
                 <AppBar
                     title="Fetcher App"
                     showMenuIconButton={false}
-                    iconElementRight={<FlatButton onClick={()=>window.location='/logout/'}
-                                                  label="Log out" />}
+                    iconElementRight={<FlatButton onClick={() => window.location = '/logout/'}
+                                                  label="Log out"/>}
                 />
-                <InputQuery />
-
-                { node }
-                <div style={styles.imageContainer}>
-                </div>
+                <InputQuery/>
+                {node}
             </div>
         )
     }
 }
+
+
+const mapStateToProps = (state, ownProps) => ({
+    queries: state.queries.items
+});
+
+
+export default connect(mapStateToProps)(Layout)

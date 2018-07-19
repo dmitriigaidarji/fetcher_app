@@ -19,17 +19,15 @@ def initsession(request):
 
 @api_view(['POST'])
 def query(request):
-    initsession(request)
     query = request.data.get('query','')
     if query != '':
         type = request.data.get('type','g')
-        ident = request.session.get('identifier')
         if type == 'y':
-            parse_youtube.delay(query, ident)
+            parse_youtube.delay(query, request.user.pk)
             # parser = YoutubeScrapper()
             # parser.getresults(query, ident)
         else:
-            parse_google.delay(query, ident)
+            parse_google.delay(query, request.user.pk)
             # parser = GoogleScrapper()
             # parser.getresults(query, ident)
         return Response(status=status.HTTP_200_OK)
@@ -108,10 +106,9 @@ def websitetags(request):
 
 @api_view(['GET'])
 def user_queries(request):
-    initsession(request)
-    ident = request.session['identifier']
-    queries = Query.objects.filter(identifier=ident)
-    return Response(QuerySimpleSerializer(queries, many=True).data)
+    # initsession(request)
+    # ident = request.session['identifier']
+    return Response(QuerySimpleSerializer(Query.objects.filter(user=request.user), many=True).data)
 
 
 class QuerySet(viewsets.ModelViewSet):

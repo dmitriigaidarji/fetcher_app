@@ -151,18 +151,29 @@ CACHES = {
     }
 }
 
-# CELERY_BROKER_URL = constants.CELERY_BROKER_URL
-
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'bundles/prod/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-prod.json'),
     }
 }
-# print("Is development mode: " + os.environ.get('DJANGO_DEVELOPMENT', 'None'))
+
+APPEND_SLASH = True
+AUTH_USER_MODEL = 'fetcher.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
 if os.environ.get('DJANGO_DEVELOPMENT'):
-    print("Confirmed dev mode")
+    print("Dev mode ON. Using local JS bundles.")
     WEBPACK_LOADER = {
         'DEFAULT': {
             'BUNDLE_DIR_NAME': 'bundles/local/',
@@ -172,10 +183,3 @@ if os.environ.get('DJANGO_DEVELOPMENT'):
 
 if os.environ.get('DJANGO_SQLITEDB'):
     from src.localsettings import *
-
-
-APPEND_SLASH = True
-AUTH_USER_MODEL = 'fetcher.User'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-# DJANGO_SETTINGS_MODULE=src.localsettings gunicorn src.wsgi

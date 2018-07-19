@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 from kombu import Exchange, Queue
-from celery.schedules import crontab
 
 from src import settings, constants
 

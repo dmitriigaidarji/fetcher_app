@@ -6,6 +6,9 @@ import urllib.parse as urllibparse
 import time
 from bs4 import BeautifulSoup
 from subprocess import check_output
+
+from django.contrib.auth import get_user_model
+
 from fetcher.models import Website, WebsiteTags, Query, RelatedQuery
 import json
 
@@ -120,8 +123,9 @@ class YoutubeScrapper:
             return None
         return None
 
-    def getresults(self, query, ident):
-        queryModel = Query.objects.create(text=query, type='y', identifier=ident)
+    def getresults(self, query, user_id):
+        queryModel = Query.objects.create(text=query, type=Query.QUERY_TYPE_YOUTUBE,
+                                          user=get_user_model().objects.get(pk=user_id))
 
         query = urllibparse.quote_plus(query)
 
@@ -221,8 +225,9 @@ class GoogleScrapper:
             queryModel.relatedProcessed = True
             queryModel.save()
 
-    def getresults(self, query, ident):
-        queryModel = Query.objects.create(text=query, type='g', identifier=ident)
+    def getresults(self, query, user_id):
+        queryModel = Query.objects.create(text=query, type=Query.QUERY_TYPE_GOOGLE,
+                                          user=get_user_model().objects.get(pk=user_id))
 
         query = urllibparse.quote_plus(query)
 
@@ -243,6 +248,7 @@ class GoogleScrapper:
             page += 1
 
         queryModel.save()
+        self.getrelated(queryModel,'{0}&num={1}&q={2}&oq={2}'.format(self.googleBaseUrl, 10, query))
         # self.web_scrapper.start(queryModel)
         # websites = queryModel.websites.filter(processed=False)
         # if len(websites) > 0:

@@ -40,7 +40,7 @@
     "redux": "^3.7.2",
     "redux-devtools": "^3.4.1",
     "redux-devtools-extension": "^2.13.2",
-    "redux-persist": "^5.10.0",
+    "redux-persist": "^4.8.0",
     "redux-thunk": "^2.2.0",
     "webpack": "^3.10.0",
     "webpack-bundle-tracker": "^0.2.1",

@@ -11,7 +11,8 @@ import QueryComponent from '../components/QueryComponent'
 import ClearIcon from 'material-ui/svg-icons/content/clear';
 import {red500} from 'material-ui/styles/colors';
 import CopyToClipboard from 'react-copy-to-clipboard';
-
+import {connect} from "react-redux";
+import {deleteQuery} from '../actions/queries'
 let styles={
     midCol : {
         width : '20%'
@@ -35,7 +36,7 @@ let styles={
     }
 };
 
-export default class ResultsContainer extends React.Component {
+class ResultsContainer extends React.Component {
     constructor(){
         super()
         this.state = {
@@ -51,12 +52,11 @@ export default class ResultsContainer extends React.Component {
     closeDialog(){
         this.setState({dialogOpen: false, query:undefined})
     }
-    deleteQuery(query){
+    deleteQuery = (query) => {
+        let {dispatch} = this.props;
         console.log('delete', query)
-        SeoApi.deleteQuery(query.id, (response) => {
-
-        });
-    }
+        dispatch(deleteQuery(query.id));
+    };
     detailsClick(query){
         this.openDialog(query)
     }
@@ -78,10 +78,7 @@ export default class ResultsContainer extends React.Component {
         if (this.props.queries == undefined){
             return this.renderLoading()
         }
-        
-
         let nodes = [];
-        let self = this
         this.props.queries.forEach((query,index) => {
             if (query.type == this.props.type){
                 let allUrls = ''
@@ -104,7 +101,7 @@ export default class ResultsContainer extends React.Component {
                       )
                 nodes.push(node)
             }
-          })
+          });
         return(
             <div>
                 {this.state.query ? 
@@ -142,3 +139,5 @@ export default class ResultsContainer extends React.Component {
         )
     }
 }
+
+export default connect()(ResultsContainer)
