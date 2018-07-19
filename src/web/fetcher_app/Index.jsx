@@ -1,36 +1,9 @@
-// main.js
 import React from 'react'
-import {AppContainer} from 'react-hot-loader'
 import {StyleRoot} from 'radium';
 import Layout from './containers/Layout'
-
-import {
-    createStore,
-    compose,
-    applyMiddleware,
-    combineReducers,
-} from "redux"
-import {Provider} from "react-redux"
-import thunk from "redux-thunk"
-import {persistStore, autoRehydrate} from 'redux-persist'
-import {composeWithDevTools} from 'redux-devtools-extension'
-import * as reducers from "./reducers"
-import App from "./containers/InitialContainer";
-import {hydrate, render} from 'react-dom';
-import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
-} from 'react-router-dom'
-// import injectTapEventPlugin from 'react-tap-event-plugin';
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-// injectTapEventPlugin();
-
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {red100, grey900, red700} from 'material-ui/styles/colors';
-
 const muiTheme = getMuiTheme({
     palette: {
         primary1Color: grey900,
@@ -43,44 +16,30 @@ const muiTheme = getMuiTheme({
     },
     userAgent: userdata.useragent,
 });
+import {Provider} from "react-redux"
+import {PersistGate} from 'redux-persist/integration/react'
+import {render} from 'react-dom';
+import {
+    BrowserRouter as Router,
+    Route
+} from 'react-router-dom'
+import configureStore from './configureStore';
 
-
-let reducer = combineReducers(reducers);
-
-// Create Redux store with initial state
-const store = (module.hot && module.hot.data && module.hot.data.store)
-    ? module.hot.data.store
-    : createStore(
-        reducer,
-        composeWithDevTools(applyMiddleware(thunk)),
-        autoRehydrate()
-    );
-
+let {store, persistor} = configureStore()
 const appRender = (Comp) => {
-    const renderMethod = !!module.hot ? render : hydrate
-    renderMethod(
+    render(
         <Provider store={store}>
-            <AppContainer>
-                <MuiThemeProvider muiTheme={muiTheme}>
-                    <StyleRoot>
-                        <Router>
-                            <Route component={Comp}/>
-                        </Router>
-                    </StyleRoot>
-                </MuiThemeProvider>
-            </AppContainer>
+            <PersistGate loading={null} persistor={persistor}>
+                    <MuiThemeProvider muiTheme={muiTheme}>
+                        <StyleRoot>
+                            <Router>
+                                <Route component={Comp}/>
+                            </Router>
+                        </StyleRoot>
+                    </MuiThemeProvider>
+            </PersistGate>
         </Provider>,
         document.getElementById('FetcherApp')
     )
 };
-
-appRender(Layout)
-
-
-// Webpack Hot Module Replacement API
-if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose((data) => {
-        data.store = store;
-    });
-}
+appRender(Layout);

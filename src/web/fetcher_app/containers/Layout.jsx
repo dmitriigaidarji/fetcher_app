@@ -7,6 +7,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from "react-redux";
 import {getUserQueries} from '../actions/queries'
+import { hot } from 'react-hot-loader'
 
 let styles = {
     imageContainer: {
@@ -111,4 +112,4 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 
-export default connect(mapStateToProps)(Layout)
+export default hot(module)(connect(mapStateToProps)(Layout))
