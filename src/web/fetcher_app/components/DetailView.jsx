@@ -5,97 +5,122 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Snackbar from 'material-ui/Snackbar';
 import {connect} from "react-redux";
-import {getLinks} from "../actions/links";
+import {getQueryDetails} from "../actions/queries";
 
-let style={
-  margin : '12px 30px 12px 0',
-}
-let circularStyle = {
-  textAlign : 'center',
+let styles = {
+    btnStyle: {
+        margin: '12px 30px 12px 0'
+    }
 }
 
 class DetailView extends React.Component {
-  constructor(){
-    super();
-    this.state = {
-      open : false,
+    constructor() {
+        super();
+        this.state = {
+            open: false,
+        };
+        this.handleCopy = this.handleCopy.bind(this)
+        this.handleRequestClose = this.handleRequestClose.bind(this)
     }
-    this.handleCopy = this.handleCopy.bind(this)
-    this.handleRequestClose = this.handleRequestClose.bind(this)
-  }
-  closeView(){
-    this.props.closeDialog()
-  }
-  showWebsites(props){
-    let {dispatch, query} = props;
-    dispatch(getLinks(query.id,1000,0));
-  }
-  componentWillUpdate(nextProps, nextState){
-    if (this.props.query.id !== nextProps.query.id)
-      this.showWebsites(nextProps)
-  }
-  componentDidMount(){
-    this.showWebsites(this.props)
-  }
-  handleRequestClose(){
-    this.setState({
-      open: false,
-    });
-  };
-  handleCopy (e) {
-    this.setState({
-      open: true,
-    });
-  }
-  render () {
-    let allUrls = "";
-    let {websites} = this.props;
-    return (
-        <Card>
-          <CardTitle>
-            {this.props.query.text}
-          </CardTitle>
-          <CardText>
-            <RaisedButton label="Go back" backgroundColor="#C62828" labelColor="#FFFFFF" style={style} onClick={this.closeView.bind(this)}/>
-            <h2>{this.props.query.websites.length} results</h2>
-              {websites != undefined ?
-                <div>
-                <CopyToClipboard text={allUrls} onCopy={this.handleCopy}>
-                  <RaisedButton label="Copy to clipboard" primary={true} style={style}/>
-                </CopyToClipboard>
-                <ul>
-                {
-                  websites.map((item,index) => {
-                    allUrls += item.url + '\n'
-                    return <li key={index}><a target="_blank" href={item.url}>{item.url}</a></li>
-                  })
-                }
-                </ul>
-                <RaisedButton label="Go back" backgroundColor="#C62828" labelColor="#FFFFFF" style={style} onClick={this.closeView.bind(this)}/>
-                <CopyToClipboard text={allUrls} onCopy={this.handleCopy}>
-                  <RaisedButton label="Copy to clipboard" primary={true} style={style}/>
-                </CopyToClipboard>
-                <Snackbar
-                  open={this.state.open}
-                  message="URLs were copied to clipboard"
-                  autoHideDuration={3000}
-                  onRequestClose={this.handleRequestClose}
-                />
-                </div>
-                : 
-                <div style={circularStyle}>
-                    <CircularProgress size={2} />
-                </div>
-              }
-          </CardText>
-        </Card>
-    );
-  }
+
+    closeView() {
+        this.props.closeDialog()
+    }
+
+    showWebsites(props) {
+        let {dispatch, query} = props;
+        dispatch(getQueryDetails(query.id));
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.props.query.id !== nextProps.query.id)
+            this.showWebsites(nextProps)
+    }
+
+    componentDidMount() {
+        this.showWebsites(this.props)
+    }
+
+    handleRequestClose() {
+        this.setState({
+            open: false,
+        });
+    };
+
+    handleCopy(e) {
+        this.setState({
+            open: true,
+        });
+    }
+
+    render() {
+        let allUrls = "";
+        let {data} = this.props;
+        console.log(data)
+        return (
+            <Card>
+                <CardTitle style={{borderBottom: '1px solid #dadada'}}>
+                    <div style={{fontSize: '150%', fontWeight: '500'}}>{this.props.query.text}</div>
+                </CardTitle>
+                <CardText>
+                    {data != undefined ?
+                        <div>
+                            {data.related.length > 0 &&
+                            <div>
+                                <h2>{data.related.length} related keywords:</h2>
+                                {
+                                    data.related.map((item, index) => <div key={index} style={
+                                        {
+                                            backgroundColor: '#463939',
+                                            borderRadius: '3px',
+                                            padding: '5px 10px',
+                                            color: 'white',
+                                            fontWeight: 400,
+                                            margin: '5px 10px 5px 0',
+                                            display: 'inline-block'
+                                        }
+                                    }>
+                                        {item.text}
+                                    </div>)
+                                }
+                            </div>
+                            }
+                            <h2>{data.websites.length} links gathered:</h2>
+                            <ul>
+                                {
+                                    data.websites.map((item, index) => {
+                                        allUrls += item.url + '\n'
+                                        return <li key={index}><a target="_blank" href={item.url}>{item.url}</a></li>
+                                    })
+                                }
+                            </ul>
+                            <RaisedButton label="Go back" backgroundColor="#C62828" labelColor="#FFFFFF"
+                                          style={styles.btnStyle}
+                                          onClick={this.closeView.bind(this)}/>
+                            <CopyToClipboard text={allUrls} onCopy={this.handleCopy}>
+                                <RaisedButton label="Copy links clipboard" primary={true} style={styles.btnStyle}/>
+                            </CopyToClipboard>
+                            <Snackbar
+                                open={this.state.open}
+                                message="URLs were copied to clipboard"
+                                autoHideDuration={3000}
+                                onRequestClose={this.handleRequestClose}
+                            />
+                        </div>
+                        :
+                        <div style={{textAlign: 'center'}}>
+                            <CircularProgress/>
+                        </div>
+                    }
+                </CardText>
+            </Card>
+        );
+    }
 }
 
 
 const mapStateToProps = (state, ownProps) => ({
-    websites: state.links.items
+    data: state.queries.detailed[ownProps.query.id]
 });
 
 export default connect(mapStateToProps)(DetailView)

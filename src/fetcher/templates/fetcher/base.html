@@ -1,16 +1,17 @@
 {% load staticfiles %}
 <!doctype html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-        {% block header %}{% endblock %}
-        <script>
-            var csrftoken = '{{ csrf_token }}';
-        </script>
-    </head>
-    <body>
-        {% block main %}{% endblock %}
-    </body>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'fetcher/css/login.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    {% block header %}{% endblock %}
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+    </script>
+</head>
+<body>
+{% block main %}{% endblock %}
+</body>
 </html>

@@ -12,30 +12,32 @@
 </head>
 <body>
 <div class="outer-div">
-    <form action="{% url 'login' %}" role="form" class="form inner-div" method="post" id="loginForm">
-        {% csrf_token %}
+    <div class="inner-div">
         <div id="title">Fetcher App</div>
-        {% if form.non_field_errors %}
-            <div class="errorsContainer">
-                {% for error in form.non_field_errors %}
-                    <div><strong>{{ error|escape }}</strong></div>
-                {% endfor %}
+        <form action="{% url 'login' %}" role="form" class="form" method="post" id="loginForm">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="errorsContainer">
+                    {% for error in form.non_field_errors %}
+                        <div><strong>{{ error|escape }}</strong></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="input-group">
+                {{ form.username.label }}
+                {{ form.username.errors }}
+                {{ form.username }}
             </div>
-        {% endif %}
-        <div class="input-group">
-            {{ form.username.label }}
-            {{ form.username.errors }}
-            {{ form.username }}
-        </div>
-        <div class="input-group">
-            {{ form.username.label }}
-            {{ form.password.errors }}
-            {{ form.password }}
-        </div>
-        <button id='submit' type="submit">
-            Login
-        </button>
-    </form>
+            <div class="input-group">
+                {{ form.password.label }}
+                {{ form.password.errors }}
+                {{ form.password }}
+            </div>
+            <button id='submit' type="submit">
+                Login
+            </button>
+        </form>
+    </div>
 </div>
 </body>
 </html>

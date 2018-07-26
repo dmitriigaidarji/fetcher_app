@@ -1,43 +1,22 @@
 import random
 import string
 
+from django.contrib.auth import get_user_model
 from rest_framework import status, routers, serializers, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from fetcher.scrapper.googlescrapper import GoogleScrapper, YoutubeScrapper
 from .models import Query, RelatedQuery, Website, WebsiteTags
-from .serializers import QuerySerializer, RelatedSerializer, WebsiteSerializer, TagSerializer, QuerySimpleSerializer
+from .serializers import QuerySerializer, RelatedSerializer, WebsiteSerializer, TagSerializer, QuerySimpleSerializer, \
+    QueryDetailSerializer, QueryCreateSerializer
 
-import datetime
-from fetcher.tasks import parse_youtube, parse_google
-
-def initsession(request):
-    request.session.set_expiry(5000000) # 2 months
-    if 'identifier' not in request.session:
-        request.session['identifier'] = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
-
-@api_view(['POST'])
-def query(request):
-    query = request.data.get('query','')
-    if query != '':
-        type = request.data.get('type','g')
-        if type == 'y':
-            parse_youtube.delay(query, request.user.pk)
-            # parser = YoutubeScrapper()
-            # parser.getresults(query, ident)
-        else:
-            parse_google.delay(query, request.user.pk)
-            # parser = GoogleScrapper()
-            # parser.getresults(query, ident)
-        return Response(status=status.HTTP_200_OK)
-    return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 @api_view(['GET'])
 def get_query(request):
-    type = request.data.get('type','g')
-    query = Query.objects.get(id = request.GET.get('id',None), type = type)
+    type = request.data.get('type', 'g')
+    query = request.user.query_set.get(id=request.GET.get('id', None), type=type)
     queriesSerializer = QuerySerializer(query)
     related = query.related.all()
     relatedSerializer = RelatedSerializer(related, many=True)
@@ -45,37 +24,36 @@ def get_query(request):
     websiteSerializer = WebsiteSerializer(websites, many=True)
 
     response = {
-        'query' : queriesSerializer.data,
-        'related' : relatedSerializer.data,
-        'websites' : websiteSerializer.data,
-        'totalwebsites' : len(query.websites.all())
+        'query': queriesSerializer.data,
+        'related': relatedSerializer.data,
+        'websites': websiteSerializer.data,
+        'totalwebsites': len(query.websites.all())
     }
     return Response(response, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 def delete_query(request):
-    query = Query.objects.get(id = request.data.get('id', None))
-    if query is not None:
-        query.delete()
+    request.user.query_set.get(id=request.data.get('id')).delete()
     return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 def querywebsites(request):
-    query = Query.objects.get(id=int(request.GET.get('query', -1)))
-    offset = int(request.GET.get('offset',0))
-    count = int(request.GET.get('count',20))
-    websites = query.websites.all()[offset:offset+count]
+    query = request.user.query_set.get(id=int(request.GET.get('query', -1)))
+    offset = int(request.GET.get('offset', 0))
+    count = int(request.GET.get('count', 20))
+    websites = query.websites.all()[offset:offset + count]
     return Response(WebsiteSerializer(websites, many=True).data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
 def websitestags(request):
-    query = Query.objects.get(id=int(request.GET.get('query', -1)))
-    count = int(request.GET.get('count',20))
+    query = request.user.query_set.get(id=int(request.GET.get('query', -1)))
+    count = int(request.GET.get('count', 20))
     websites = query.websites.all()[0:count]
 
-    alltags=[]
+    alltags = []
     multiplier = 1
     for website in websites:
         tags = website.tags.all()
@@ -89,8 +67,8 @@ def websitestags(request):
                 index += 1
             if not flag:
                 alltags.append({
-                    'value' : tag.text,
-                    'count' : tag.count * multiplier
+                    'value': tag.text,
+                    'count': tag.count * multiplier
                 })
             pass
     pass
@@ -104,13 +82,19 @@ def websitetags(request):
     tags = website.tags.all()
     return Response(TagSerializer(tags, many=True).data, status=status.HTTP_200_OK)
 
+
 @api_view(['GET'])
 def user_queries(request):
-    # initsession(request)
-    # ident = request.session['identifier']
     return Response(QuerySimpleSerializer(Query.objects.filter(user=request.user), many=True).data)
 
 
 class QuerySet(viewsets.ModelViewSet):
-    queryset = Query.objects.all()
-    serializer_class = QuerySerializer
+    def get_queryset(self):
+        return self.request.user.query_set.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return QueryDetailSerializer
+        elif self.action == 'create':
+            return QueryCreateSerializer
+        return QuerySerializer

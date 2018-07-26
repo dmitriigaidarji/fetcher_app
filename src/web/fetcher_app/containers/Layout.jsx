@@ -7,7 +7,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from "react-redux";
 import {getUserQueries} from '../actions/queries'
-import { hot } from 'react-hot-loader'
+import {hot} from 'react-hot-loader'
 
 let styles = {
     imageContainer: {
@@ -27,7 +27,7 @@ let styles = {
     },
     slide: {
         padding: 10,
-    },
+    }
 };
 
 class Layout extends React.Component {

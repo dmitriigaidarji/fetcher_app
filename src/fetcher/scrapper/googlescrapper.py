@@ -123,11 +123,10 @@ class YoutubeScrapper:
             return None
         return None
 
-    def getresults(self, query, user_id):
-        queryModel = Query.objects.create(text=query, type=Query.QUERY_TYPE_YOUTUBE,
-                                          user=get_user_model().objects.get(pk=user_id))
+    def getresults(self, query_id):
+        queryModel = Query.objects.get(pk=query_id)
 
-        query = urllibparse.quote_plus(query)
+        query = urllibparse.quote_plus(queryModel.text)
 
         #First page
         url = '{0}/results?&search_query={1}'.format(self.baseUrl, query)
@@ -216,20 +215,20 @@ class GoogleScrapper:
         related = results
         if len(related) > 0:
             for rel in related:
-                existent = RelatedQuery.objects.filter(text=rel)
-                if len(existent) > 0:
-                    relatedModel = existent[0]
-                else:
-                    relatedModel = RelatedQuery.objects.create(text=rel)
-                queryModel.related.add(relatedModel)
+                if len(rel) > 0:
+                    existent = RelatedQuery.objects.filter(text=rel)
+                    if len(existent) > 0:
+                        relatedModel = existent[0]
+                    else:
+                        relatedModel = RelatedQuery.objects.create(text=rel)
+                    queryModel.related.add(relatedModel)
             queryModel.relatedProcessed = True
             queryModel.save()
 
-    def getresults(self, query, user_id):
-        queryModel = Query.objects.create(text=query, type=Query.QUERY_TYPE_GOOGLE,
-                                          user=get_user_model().objects.get(pk=user_id))
+    def getresults(self, query_id):
+        queryModel = Query.objects.get(pk=query_id)
 
-        query = urllibparse.quote_plus(query)
+        query = urllibparse.quote_plus(queryModel.text)
 
         # Related
         # thread = threading.Thread(target=self.getrelated, args=(queryModel,'{0}&num={1}&q={2}&oq={2}'.format(self.googleBaseUrl, 10, query)))

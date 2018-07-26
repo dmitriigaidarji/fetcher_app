@@ -19,15 +19,22 @@ from django.contrib.auth.views import login, logout
 from django.urls import path, include
 from rest_framework import routers, serializers, viewsets
 from fetcher.api import QuerySet
+from rest_framework_swagger.views import get_swagger_view
+
+from fetcher.views import IndexView
+
+schema_view = get_swagger_view(title='FecherApp API')
+
 
 router = routers.DefaultRouter()
-router.register(r'queries', QuerySet)
+router.register(r'queries', QuerySet, base_name='Query')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^schema/',schema_view),
     url(r'^api/', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api-auth/$', include('rest_framework.urls')),
     url(r'^login/$', login, name='login'),
     url(r'^logout/$', logout, name='logout'),
-    url(r'^', include('fetcher.urls')),
+    url(r'', IndexView.as_view(), name='index')
 ]
