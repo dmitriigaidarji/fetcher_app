@@ -34,19 +34,9 @@ Open the website in your browser
 0.0.0.0:8000
 ```
 
-### Todos
+### TODOs
 
- - Rewrite all javascript requests using AXIOS library and move everything to reducers
- - Move all heavy calculations to Celery tasks
- - Publish project to a demo server
- - Add Google crawler functionality
  - Use Websocker for new events (or Firebase service) for live updates of task progress
  - Add RabbitMQ service as a more reliable communication layer between Django and Celery
- - Add sign up / login functionality instead of anonymous sessions
  - Add unit tests for back end
  - Add UI tests for front end
-
-License
-----
-
-MIT

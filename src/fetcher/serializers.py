@@ -35,29 +35,3 @@ class QueryCreateSerializer(serializers.Serializer):
         query = Query.objects.create(**validated_data)
         parse_query.delay(query.pk, query.type)
         return query
-
-
-class QuerySimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = Query
-        depth = 1
-
-
-class RelatedSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = RelatedQuery
-
-
-class WebsiteSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = Website
-        depth = 1
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = WebsiteTags
