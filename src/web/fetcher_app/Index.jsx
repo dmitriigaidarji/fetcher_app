@@ -14,7 +14,7 @@ const muiTheme = getMuiTheme({
     avatar: {
         borderColor: null,
     },
-    userAgent: userdata.useragent,
+    userAgent: navigator.userAgent,
 });
 import {Provider} from "react-redux"
 import {PersistGate} from 'redux-persist/integration/react'

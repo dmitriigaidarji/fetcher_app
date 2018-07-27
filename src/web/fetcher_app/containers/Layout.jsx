@@ -96,7 +96,7 @@ class Layout extends React.Component {
                 <AppBar
                     title="Fetcher App"
                     showMenuIconButton={false}
-                    iconElementRight={<FlatButton onClick={() => window.location = '/logout/'}
+                    iconElementRight={<FlatButton onClick={() => window.location = django_context.logout_url}
                                                   label="Log out"/>}
                 />
                 <InputQuery/>

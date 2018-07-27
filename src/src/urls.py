@@ -21,20 +21,22 @@ from rest_framework import routers, serializers, viewsets
 from fetcher.api import QuerySet
 from rest_framework_swagger.views import get_swagger_view
 
-from fetcher.views import IndexView
+from fetcher.forms import MyAuthenticationForm
+from fetcher.views import IndexView, FetcherApp
 
 schema_view = get_swagger_view(title='FecherApp API')
-
 
 router = routers.DefaultRouter()
 router.register(r'queries', QuerySet, base_name='Query')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url(r'^schema/',schema_view),
-    url(r'^api/', include(router.urls)),
-    url(r'^api-auth/$', include('rest_framework.urls')),
-    url(r'^login/$', login, name='login'),
-    url(r'^logout/$', logout, name='logout'),
-    url(r'', IndexView.as_view(), name='index')
+    path('fetcher/', include([
+        path('admin/', admin.site.urls),
+        url(r'^schema/', schema_view),
+        url(r'^api/', include(router.urls)),
+        path('login/', login, {'authentication_form': MyAuthenticationForm}, name='login'),
+        url(r'^logout/$', logout, name='logout'),
+        url(r'^', FetcherApp.as_view(), name='fetcher')
+    ])),
+    url(r'^', IndexView.as_view(), name='index')
 ]

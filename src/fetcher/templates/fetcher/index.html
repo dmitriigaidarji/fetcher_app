@@ -7,9 +7,9 @@
 {% block main %}
 <div id="FetcherApp"></div>
 <script type="text/javascript">
-	var userdata = {
-		useragent : '{{ useragent }}'
-	}
+	var django_context = {
+        logout_url: '{{ logout_url }}'
+	};
 </script>
 {% render_bundle 'vendors' %}
 {% render_bundle 'FetcherApp' %}
