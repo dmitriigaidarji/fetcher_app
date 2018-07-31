@@ -16,12 +16,13 @@ export default function queries(state = initialState, action = {}) {
             };
         case apiActions.FETCH_QUERY_SUCCESS:
             return {
-                ...state, detailed: {
-                    [action.query_id]: Object.assign(action.payload, {
-                        isFetching: false,
-                        lastUpdated: action.receivedAt,
+                ...state, detailed: Object.assign(state.detailed,
+                    {
+                        [action.query_id]: Object.assign(action.payload, {
+                            isFetching: false,
+                            lastUpdated: action.receivedAt,
+                        })
                     })
-                }
             }
         default:
             return {...state, isFetching: false};

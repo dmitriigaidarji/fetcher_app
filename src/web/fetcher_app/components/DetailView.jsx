@@ -56,7 +56,6 @@ class DetailView extends React.Component {
     render() {
         let allUrls = "";
         let {data} = this.props;
-        console.log(data)
         return (
             <Card>
                 <CardTitle style={{borderBottom: '1px solid #dadada'}}>
