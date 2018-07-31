@@ -15,7 +15,7 @@ config.plugins = config.plugins.concat([
     new webpack.DefinePlugin({
         'process.env': {
             'NODE_ENV': JSON.stringify('production'),
-            'BASE_API_URL': JSON.stringify('http://0.0.0.0:8000/fetcher/api/'),
+            'BASE_API_URL': JSON.stringify('http://dimag.co/fetcher/api/'),
             'PUBLIC_URL': JSON.stringify('/')
         }
     }),
