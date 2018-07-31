@@ -7,13 +7,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if not get_user_model().objects.filter(username='demo').exists():
-            get_user_model().objects.create(
+            user = get_user_model().objects.create(
                 username='demo',
-                password='demo',
                 email='dmitriigaidarji@gmail.com',
                 is_active=True,
                 is_staff=True
             )
+            user.set_password('demo')
+            user.save()
             print('Demo user has been created')
         else:
             print('Demo user already exists in database')
